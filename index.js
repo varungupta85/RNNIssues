@@ -6,6 +6,10 @@ import { Navigation } from 'react-native-navigation'
 import App from './App'
 import MergeOptionsScreen from './MergeOptionsScreen'
 import { Platform } from 'react-native'
+import GlobalConfig from './GlobalConfig'
+import AlarmListScreen from './AlarmListScreen'
+import GroupListScreen from './GroupListScreen'
+import ContactListScreen from './ContactListScreen'
 
 const colors = {
   white: 'white',
@@ -73,66 +77,147 @@ const currentColorTheme = {
   statusBarColor: colors.darkBlue
 }
 
-Navigation.registerComponent('com.myApp.WelcomeScreen', () => App)
 Navigation.registerComponent('MergeOptionsScreen', () => MergeOptionsScreen)
+Navigation.registerComponent('AlarmListScreen', () => AlarmListScreen)
+Navigation.registerComponent('GroupListScreen', () => GroupListScreen)
+Navigation.registerComponent('ContactListScreen', () => ContactListScreen)
 
-Navigation.setDefaultOptions({
-  statusBar: {
-    backgroundColor: currentColorTheme.statusBarColor
-  },
-  layout: {
-    orientation: ['portrait'],
-    backgroundColor: currentColorTheme.screenBackgroundColor
-  },
-  bottomTabs: {
-    visible: false,
-    drawBehind: true,
-    backgroundColor: currentColorTheme.tabBarBackgroundColor,
-    titleDisplayMode: 'alwaysShow'
-  },
-  bottomTab: {
-    iconColor: currentColorTheme.tabBarButtonColor,
-    selectedIconColor: currentColorTheme.tabBarSelectedButtonColor,
-    textColor: currentColorTheme.tabBarButtonColor,
-    selectedTextColor: currentColorTheme.tabBarSelectedButtonColor
-  },
-  topBar: {
-    leftButtonColor: currentColorTheme.navBarButtonColor,
-    rightButtonColor: currentColorTheme.navBarButtonColor,
-    title: {
-      color: currentColorTheme.navBarTextColor
-    },
-    subtitle: {
-      fontSize: 12,
-      color: currentColorTheme.transluscentText
-    },
-    background: {
-      color: currentColorTheme.navBarBackgroundColor
-    },
-    backButton: {
-      color: currentColorTheme.navBarButtonColor,
-      showTitle: false
-    }
-  },
-  animations: {
-    push: {
-      waitForRender: true
-    }
+class Main {
+  constructor() {
+    Navigation.events().registerAppLaunchedListener(() => {
+      this.startApp()
+    })
+    GlobalConfig.eventEmitter.addListener('changeTheme', this.startApp, this)
   }
-})
 
-Navigation.events().registerAppLaunchedListener(() => {
-  Navigation.setRoot({
-    root: {
-      stack: {
-        children: [
-          {
-            component: {
-              name: 'com.myApp.WelcomeScreen'
-            }
-          }
-        ]
+  startApp() {
+    Navigation.setDefaultOptions({
+      statusBar: {
+        backgroundColor: currentColorTheme.statusBarColor
+      },
+      layout: {
+        orientation: ['portrait'],
+        backgroundColor: currentColorTheme.screenBackgroundColor
+      },
+      bottomTabs: {
+        visible: true,
+        drawBehind: false,
+        backgroundColor: currentColorTheme.tabBarBackgroundColor,
+        titleDisplayMode: 'alwaysShow'
+      },
+      bottomTab: {
+        iconColor: currentColorTheme.tabBarButtonColor,
+        selectedIconColor: currentColorTheme.tabBarSelectedButtonColor,
+        textColor: currentColorTheme.tabBarButtonColor,
+        selectedTextColor: currentColorTheme.tabBarSelectedButtonColor
+      },
+      topBar: {
+        leftButtonColor: currentColorTheme.navBarButtonColor,
+        rightButtonColor: currentColorTheme.navBarButtonColor,
+        title: {
+          color: currentColorTheme.navBarTextColor
+        },
+        subtitle: {
+          fontSize: 12,
+          color: currentColorTheme.transluscentText
+        },
+        background: {
+          color: currentColorTheme.navBarBackgroundColor
+        },
+        backButton: {
+          color: currentColorTheme.navBarButtonColor,
+          showTitle: false
+        }
+      },
+      animations: {
+        push: {
+          waitForRender: true
+        }
       }
-    }
-  })
-})
+    })
+
+    Navigation.setRoot({
+      root: {
+        bottomTabs: {
+          id: 'BottomTabsId',
+          children: [
+            {
+              stack: {
+                children: [
+                  {
+                    component: {
+                      id: 'AlarmListScreen',
+                      name: 'AlarmListScreen',
+                      passProps: {},
+                      options: {
+                        bottomTab: {
+                          text: 'Alarms',
+                          icon: require('./img/ic_find.png')
+                        },
+                        topBar: {
+                          title: {
+                            text: 'Alarms'
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              stack: {
+                children: [
+                  {
+                    component: {
+                      id: 'GroupListScreen',
+                      name: 'GroupListScreen',
+                      passProps: {},
+                      options: {
+                        bottomTab: {
+                          text: 'Groups',
+                          icon: require('./img/ic_find.png')
+                        },
+                        topBar: {
+                          title: {
+                            text: 'Groups'
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              stack: {
+                children: [
+                  {
+                    component: {
+                      id: 'ContactListScreen',
+                      name: 'ContactListScreen',
+                      passProps: {},
+                      options: {
+                        bottomTab: {
+                          text: 'Contacts',
+                          icon: require('./img/ic_find.png')
+                        },
+                        topBar: {
+                          title: {
+                            text: 'Contacts'
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    })
+  }
+}
+
+GlobalConfig.App = new Main()
