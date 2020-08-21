@@ -73,18 +73,6 @@ class App extends Component {
             <View style={styles.body}>
               <View style={styles.sectionContainer}>
                 <TouchableOpacity
-                  onPress={() =>
-                    Navigation.push(this.props.componentId, {
-                      component: {
-                        name: 'MergeOptionsScreen'
-                      }
-                    })
-                  }>
-                  <Text style={styles.sectionTitle}>
-                    {'Merge Options Screen'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
                   onPress={() => GlobalConfig.eventEmitter.emit('changeTheme')}>
                   <Text style={styles.sectionTitle}>{'Set Root'}</Text>
                 </TouchableOpacity>

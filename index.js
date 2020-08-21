@@ -3,7 +3,6 @@
  */
 
 import { Navigation } from 'react-native-navigation'
-import App from './App'
 import MergeOptionsScreen from './MergeOptionsScreen'
 import { Platform } from 'react-native'
 import GlobalConfig from './GlobalConfig'
